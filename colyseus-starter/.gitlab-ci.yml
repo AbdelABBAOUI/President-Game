@@ -1,0 +1,34 @@
+
+
+image: node
+
+
+variables:
+  # Variables pour le registry Docker de GitLab
+  DOCKER_REGISTRY: $CI_REGISTRY
+  BACKEND_IMAGE_NAME: $CI_REGISTRY_IMAGE/backend
+  FRONTEND_IMAGE_NAME: $CI_REGISTRY_IMAGE/frontend
+stages:
+  - lint
+  - build
+
+eslint_backend:
+  stage: lint
+  before_script:
+    - npm install
+  script:
+    - npm i eslint
+    - npx eslint .
+backend_build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${BACKEND_IMAGE_NAME}:${CI_COMMIT_SHA}"
+      --destination "${BACKEND_IMAGE_NAME}:1.0.0"
+      --customPlatform linux/arm64
