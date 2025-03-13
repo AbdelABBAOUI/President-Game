@@ -1,0 +1,29 @@
+variables:
+  # Variables pour le registry Docker de GitLab
+  DOCKER_REGISTRY: $CI_REGISTRY
+  FRONTEND_IMAGE_NAME: $CI_REGISTRY_IMAGE/frontend
+
+stages:
+  - lint
+  - build
+
+lint:
+  stage: lint
+  image: node:18
+  before_script:
+    - npm install
+  script:
+    - npm run lint
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${FRONTEND_IMAGE_NAME}:1.0.0"
+      --custom-platform=linux/arm64
+  when: manual

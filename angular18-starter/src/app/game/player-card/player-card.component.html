@@ -1,0 +1,54 @@
+<div class="relative w-16 h-24 bg-white rounded-lg shadow-md border border-gray-200">
+  <!-- Cartes avec figures (J, Q, K, A) -->
+  <ng-container *ngIf="isJQKA; else numberCard">
+    <!-- Coins fixes -->
+    <div class="absolute top-1 left-1 text-sm leading-none" [class.text-red-600]="isRed">
+      {{ value }}
+      <div class="text-[10px] scale-95 m-0 p-0">{{ suit }}</div>
+    </div>
+    <div class="absolute bottom-1 right-1 text-sm leading-none rotate-180" [class.text-red-600]="isRed">
+      {{ value }}
+      <div class="text-[10px] scale-95 m-0 p-0">{{ suit }}</div>
+    </div>
+
+    <!-- Image centrale pour J, Q, K -->
+    <div class="absolute inset-0 flex items-center justify-center p-1" *ngIf="isFigure">
+      <img [src]="getFigureImage()" 
+           [alt]="value"
+           class="w-full h-full object-contain">
+    </div>
+  </ng-container>
+
+ <!-- Pour les cartes numériques -->
+ <ng-template #numberCard>
+  <div class="relative h-full w-full">
+    <!-- Coins fixes -->
+    <div class="absolute top-1 leading-none left-1 text-sm" [class.text-red-600]="isRed">
+      {{ value }}
+      <div class="text-[10px] scale-95 m-0 p-0">{{ suit }}</div>
+    </div>
+    <div class="absolute bottom-1 leading-none right-1 text-sm rotate-180" [class.text-red-600]="isRed">
+      {{ value }}
+      <div class="text-[10px] scale-95 leading-tight m-0 p-0">{{ suit }}</div>
+    </div>
+
+
+    <!-- Symboles centraux dynamiques -->
+    <ng-container *ngIf="!isJQKA">
+      <div class="absolute inset-0">
+        <ng-container *ngFor="let pos of centerSymbolPositions">
+          <div [class.text-red-600]="isRed"
+              class="text-lg absolute"
+              [style.top]="pos.top"
+              [style.bottom]="pos.bottom"
+              [style.left]="pos.left"
+              [style.right]="pos.right"
+              [style.transform]="pos.transform">
+            {{ suit }}
+          </div>
+        </ng-container>
+      </div>
+    </ng-container> 
+  </div>
+ </ng-template>
+</div>

@@ -1,0 +1,17 @@
+<div class="waiting-room">
+    <h1>Salle d'Attente</h1>
+  
+    <p>
+      <strong>ID de la Salle:</strong>
+      <span class="room-id">{{ roomId }}</span>
+    </p>
+  
+    <h2>Joueurs dans la Salle</h2>
+    <ul class="players-list">
+      <li *ngFor="let player of players">{{ player }}</li>
+    </ul>
+  
+    <p class="waiting-message">
+      En attente d'autres joueurs<span class="loading-dots"></span>
+    </p>
+  </div>

@@ -1,0 +1,48 @@
+
+  <div class="room">
+  <div class="room-manager">
+    <h1>Président</h1>
+
+    <div class="card-symbols">
+      <span class="card-symbol heart">♥</span>
+      <span class="card-symbol spade">♠</span>
+      <span class="card-symbol diamond">♦</span>
+      <span class="card-symbol club">♣</span>
+    </div>
+
+    <div class="input-group">
+      <label for="playerName">Votre Nom</label>
+      <input 
+        type="text" 
+        [(ngModel)]="playerName" 
+        id="playerName" 
+        placeholder="Entrez votre nom pour jouer" />
+    </div>
+
+    <div class="button-group">
+      <button class="create-btn" (click)="createRoom()">
+        Créer une Table
+      </button>
+    </div>
+
+    <div class="room-info" *ngIf="roomCreated">
+      <p>Table Créée !</p>
+      <p>ID de la Table: <span class="room-id">{{ roomCreated }}</span></p>
+    </div>
+
+    <div class="input-group">
+      <label for="roomId">ID de la Table</label>
+      <input 
+        type="text" 
+        [(ngModel)]="roomId" 
+        id="roomId" 
+        placeholder="Entrez l'ID de la table à rejoindre" />
+    </div>
+
+    <div class="button-group">
+      <button class="join-btn" (click)="joinRoom()">
+        Rejoindre la Table
+      </button>
+    </div>
+  </div>
+</div>

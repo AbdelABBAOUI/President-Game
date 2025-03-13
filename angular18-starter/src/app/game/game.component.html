@@ -1,0 +1,81 @@
+<div style="background-color: #f3f4f6; min-height: 100vh;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+
+        <!-- En-tête avec les boutons et le tour -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+
+            <!-- Boutons de gauche -->
+            <div style="display: flex; gap: 1rem;">
+                <button style="background-color: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    Quitter la partie
+                </button>
+                <button style="background-color: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    Copier l'ID
+                </button>
+            </div>
+
+            <!-- Indicateur de tour -->
+            <div style="background-color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="turn-indicator">
+                <!-- Affichage dynamique basé sur le tour -->
+                <div *ngIf="isMyTurn">
+                    <p style="font-size: 1.25rem; font-weight: 600; color: #1f2937;">C'est votre tour de jouer !</p>
+                </div>
+                <div *ngIf="!isMyTurn">
+                    <p style="font-size: 1.25rem; font-weight: 600; color: #1f2937;">Attendez votre tour...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table de jeu -->
+        <div style="position: relative; width: 100%; height: 24rem; background-color: #15803d; border-radius: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="table-border">
+            <!-- Bordure décorative -->
+            <div style="position: absolute; inset: 1rem; border: 4px solid #16a34a; border-radius: 1rem;"></div>
+
+            <!-- Zone des cartes -->
+            <div style="position: absolute; inset: 2rem; background-color: rgba(20, 83, 45, 0.3); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                <!-- Emplacement des cartes jouées -->
+                <div style="position: relative; width: 16rem; height: 10rem; background-color: rgba(20, 83, 45, 0.5); border-radius: 0.5rem; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+
+                    <!-- Dernière carte de la pile (centrale) -->
+                    <div *ngIf="pile.length > 0" style="width: 4rem; height: 6rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;" class="card-rotate-right">
+                        
+                        <app-player-card [value]="getCardValue(pile[pile.length - 1])" [suit]="getCardSuit(pile[pile.length - 1])"></app-player-card>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coins décorés -->
+            <div style="position: absolute; top: 1rem; left: 1rem; width: 3rem; height: 3rem; border-radius: 9999px; background-color: #166534;"></div>
+            <div style="position: absolute; top: 1rem; right: 1rem; width: 3rem; height: 3rem; border-radius: 9999px; background-color: #166534;"></div>
+            <div style="position: absolute; bottom: 1rem; left: 1rem; width: 3rem; height: 3rem; border-radius: 9999px; background-color: #166534;"></div>
+            <div style="position: absolute; bottom: 1rem; right: 1rem; width: 3rem; height: 3rem; border-radius: 9999px; background-color: #166534;"></div>
+        </div>
+
+
+        <!-- Cartes du joueur -->
+        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
+            <div *ngFor="let card of hand.cards" style="width: 4rem; height: 6rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+                <button 
+                    (click)="playCard(card)" 
+                    [disabled]="!isMyTurn || !canPlayCard(card)"
+                    [class.invalid-card]="!canPlayCard(card)" 
+                    class="card-button">
+                    <app-player-card [value]=getCardValue(card) [suit]=getCardSuit(card)></app-player-card>
+                </button>
+            </div>
+        </div>
+
+        <button 
+            [ngStyle]="{
+                'background-color': isMyTurn ? '#4caf50' : '#d1d5db', 
+                'color': isMyTurn ? 'white' : '#6b7280'
+            }"
+            style="color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+            (click)="passTurn()" 
+            [disabled]="!isMyTurn">
+            Passer le tour
+        </button>
+
+
+    </div>
+</div>
